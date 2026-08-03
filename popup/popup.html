@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name" data-i18n="brand">Threads&nbsp;AI</span>
+        <span class="model-chip" id="modelChip" hidden></span>
+      </div>
+      <div class="top-right">
+        <button class="icon-btn" id="ideasBtn" title="Идеи постов" data-i18n-title="sIdeas" aria-label="Идеи постов">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2h5c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3z"/></svg>
+        </button>
+        <button class="icon-btn" id="profileBtn" title="Мой профиль" data-i18n-title="sProfile" aria-label="Мой профиль">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-3.8 3.6-6.2 8-6.2s8 2.4 8 6.2"/></svg>
+        </button>
+        <button class="icon-btn" id="historyBtn" title="История чатов" data-i18n-title="sHistory" aria-label="История чатов">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </button>
+        <button class="icon-btn" id="gear" title="Настройки" data-i18n-title="settings" aria-label="Настройки">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+        <button class="icon-btn" id="backBtn" title="Назад" aria-label="Назад" hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="view" id="viewChat">
+      <div class="fiction-picker" id="fictionPicker" hidden></div>
+      <main class="chat" id="chat"></main>
+      <form class="composer" id="composer">
+        <button type="button" class="fiction-chip" id="fictionBtn" title="Выдумка: ИИ придумывает истории-ветки из 2–4 частей" data-i18n-title="sFictionTip"><span class="fiction-star">✦</span><span data-i18n="sFiction">Выдумка</span></button>
+        <textarea id="input" rows="1" placeholder="Спросите ИИ…" data-i18n-ph="placeholder"></textarea>
+        <button type="button" class="send stop" id="stop" aria-label="Остановить" hidden>
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>
+        </button>
+        <button type="submit" class="send" id="send" aria-label="Отправить">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+        </button>
+      </form>
+    </section>
+
+    <section class="view settings-view" id="viewHistory" hidden>
+      <div class="card">
+        <div class="h-row">
+          <h2 data-i18n="sHistory">История чатов</h2>
+          <button class="mini-btn" id="newChat" data-i18n="newChat">Новый чат</button>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </section>
+
+    <section class="view settings-view" id="viewSettings" hidden>
+      <div class="card">
+        <h2 data-i18n="sConn">Подключение</h2>
+        <div class="field">
+          <label data-i18n="sApiKey">API-ключ</label>
+          <div class="key-row">
+            <input id="apiKey" type="password" placeholder="sk-…" autocomplete="off" />
+            <button class="mini-btn" id="keyToggle" data-i18n="show">Показать</button>
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="sBaseUrl">Base URL</label>
+          <input id="baseUrl" type="text" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label data-i18n="sModel">Модель</label>
+          <input id="model" type="text" autocomplete="off" />
+        </div>
+        <div class="row">
+          <button class="mini-btn primary" id="checkBtn" data-i18n="sCheck">Проверить подключение</button>
+          <span class="hint" id="checkHint"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="sLang">Язык интерфейса</h2>
+        <div class="row">
+          <span class="switch-label" data-i18n="sLangLabel">Язык</span>
+          <select id="lang">
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="sAuto">Автоматизация</h2>
+        <div class="row">
+          <span class="switch-label" data-i18n="sAutoOn">Автозапуск по расписанию</span>
+          <input type="checkbox" id="autoEnabled" />
+        </div>
+        <div class="row">
+          <span class="switch-label" data-i18n="sInterval">Интервал (минут)</span>
+          <input type="number" id="autoInterval" min="15" max="1440" />
+        </div>
+        <div class="field">
+          <label data-i18n="sTask">Задача для ИИ</label>
+          <textarea id="autoTask" rows="3"></textarea>
+        </div>
+        <div class="row">
+          <button class="mini-btn primary" id="autoRunBtn" data-i18n="sRunNow">Запустить сейчас</button>
+          <span class="hint" id="autoStatus"></span>
+        </div>
+        <div class="auto-report" id="autoReport" hidden></div>
+        <p class="note hint" data-i18n="sAutoNote">Авто-режим читает ленту и составляет отчёт. Публикация и ответы — только с вашего подтверждения.</p>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="sTrends">Тренды дня</h2>
+        <div class="row">
+          <button class="mini-btn primary" id="trendBtn" data-i18n="sTrendsRun">Собрать отчёт</button>
+          <span class="hint" id="trendStatus"></span>
+        </div>
+        <p class="note hint" data-i18n="sTrendsNote">ИИ пролистает ленту, проверит темы в поиске и соберёт топ-5 тем дня с примерами и идеей поста для вас. Отчёты хранятся здесь (последние 7).</p>
+        <div class="auto-report" id="trendReports" hidden></div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="sPacing">Защита от бана</h2>
+        <div class="row">
+          <span class="switch-label" data-i18n="sPacingOn">Паузы между действиями</span>
+          <input type="checkbox" id="pacingEnabled" />
+        </div>
+        <div class="row">
+          <span class="switch-label" data-i18n="sPacingDelay">Базовая пауза (сек)</span>
+          <input type="number" id="pacingDelay" min="5" max="300" />
+        </div>
+        <div class="row">
+          <span class="switch-label" data-i18n="sPacingLimit">Лимит действий в час</span>
+          <input type="number" id="pacingPerHour" min="5" max="200" />
+        </div>
+        <p class="note hint" data-i18n="sPacingNote">Перед черновиком, публикацией и ответами ИИ ждёт случайную паузу (1–3 базовые) и ведёт счётчик действий. При превышении лимита в час — действия блокируются до следующего часа.</p>
+      </div>
+    </section>
+
+    <section class="view settings-view" id="viewIdeas" hidden>
+      <div class="card">
+        <div class="h-row">
+          <h2 data-i18n="sIdeas">Идеи постов</h2>
+          <button class="mini-btn primary" id="ideasGen" data-i18n="sIdeasGen">Сгенерировать</button>
+        </div>
+        <div class="row">
+          <span class="switch-label" data-i18n="sIdeasCount">Количество идей</span>
+          <input type="number" id="ideasCount" min="5" max="20" />
+        </div>
+        <div class="field">
+          <label data-i18n="sIdeasHype">Хайповость</label>
+          <div class="hype-row">
+            <span class="hype-end" data-i18n="sIdeasHypeLo">Спокойно</span>
+            <input type="range" id="ideasHype" min="0" max="100" step="5" />
+            <span class="hype-end hype-val" id="ideasHypeVal">70</span>
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="sIdeasTopic">Тема (необязательно)</label>
+          <input id="ideasTopic" type="text" placeholder="например: нейросети, спорт, мемы" data-i18n-ph="sIdeasTopicPh" />
+        </div>
+        <p class="note hint" data-i18n="sIdeasNote">ИИ пролистает вашу ленту и предложит идеи под текущие тренды: тема + цепляющий хук для каждой.</p>
+        <span class="hint" id="ideasStatus"></span>
+        <div class="ideas-list" id="ideasList"></div>
+      </div>
+
+      <div class="card">
+        <div class="h-row">
+          <h2 data-i18n="sSchedule">Очередь публикаций</h2>
+          <button class="mini-btn primary" id="ideasSchedule" data-i18n="sScheduleAll">Запланировать все идеи</button>
+        </div>
+        <div class="row">
+          <span class="switch-label" data-i18n="sScheduleInterval">Интервал между постами (мин)</span>
+          <input type="number" id="scheduleInterval" min="5" max="10080" />
+        </div>
+        <span class="hint" id="scheduleStatus"></span>
+        <p class="note hint" data-i18n="sScheduleNote">ИИ превращает каждую идею в готовый пост (≤500 символов, без эмодзи) и ставит его в очередь. Когда наступает время — расширение публикует пост автоматически и уведомляет вас.</p>
+        <div class="ideas-list" id="scheduleList"></div>
+      </div>
+    </section>
+
+    <section class="view settings-view" id="viewProfile" hidden>
+      <div class="card">
+        <h2 data-i18n="sProfile">Мой профиль</h2>
+        <p class="note hint" data-i18n="sStyleNote">AI изучит ваши посты (откроет ваш профиль в Threads) и запомнит, как вы пишете: тон, длину, эмодзи, хэштеги. Затем будет писать посты и комментарии в вашей манере.</p>
+        <div class="row">
+          <button class="mini-btn primary" id="studyBtn" data-i18n="sStudy">Изучить мой стиль</button>
+          <button class="mini-btn" id="clearStyle" data-i18n="sClear" hidden>Очистить</button>
+        </div>
+        <span class="hint" id="studyStatus"></span>
+        <div class="field">
+          <label data-i18n="sStyleEdit">Ваш стиль — можно редактировать вручную</label>
+          <textarea id="styleEdit" rows="6" placeholder="…" data-i18n-ph="sStylePh"></textarea>
+        </div>
+        <div class="row">
+          <button class="mini-btn primary" id="saveStyle" data-i18n="sSave">Сохранить</button>
+          <span class="hint" id="saveHint"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="sAnalytics">Аналитика последних 5 постов</h2>
+        <p class="note hint" data-i18n="sAnNote">Открывает ваш профиль, берёт последние 5 постов и показывает, что заходит, а что нет.</p>
+        <div class="row">
+          <button class="mini-btn primary" id="analyticsBtn" data-i18n="sAnRun">Провести аналитику</button>
+          <button class="mini-btn" id="analyticsRefresh" data-i18n="sAnRefresh">Обновить</button>
+        </div>
+        <span class="hint" id="analyticsStatus"></span>
+        <div class="ideas-list" id="analyticsList"></div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="sTraits">Характер</h2>
+        <p class="note hint" data-i18n="sTraitsNote">Ползунки влияют на то, как ИИ пишет посты и комментарии.</p>
+        <div id="traits"></div>
+      </div>
+    </section>
+  </div>
+  <script src="lang.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
