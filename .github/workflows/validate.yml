@@ -1,0 +1,45 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate extension
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: manifest.json — valid JSON
+        run: python3 -c "import json,sys; json.load(open('manifest.json'))"
+
+      - name: manifest.json — required keys
+        run: python3 -c "
+import json
+m = json.load(open('manifest.json'))
+for k in ('manifest_version', 'name', 'version', 'background', 'permissions'):
+    assert k in m, f'missing key: {k}'
+print('manifest ok, version', m['version'])
+"
+
+      - name: JS syntax check
+        run: |
+          for f in background.js content.js popup/*.js; do
+            [ -f "$f" ] && node --check "$f" && echo "ok: $f"
+          done
+
+      - name: icons exist
+        run: |
+          python3 -c "
+import json, os
+m = json.load(open('manifest.json'))
+icons = m.get('icons', {})
+assert icons, 'icons not found'
+for size, path in icons.items():
+    assert os.path.exists(path), f'icon {path} missing'
+print('icons ok')
+"
